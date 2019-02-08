@@ -508,11 +508,4 @@ what does not exist?"]]])
 ; Comments
 ;;;;;;;;;;;;;;
 
-
-(comment
-  (use 'figwheel-sidecar.repl-api)
-  (start-figwheel!)
-  (cljs-repl))                                              ;start repl
-
-
-
+;;    (start)   - for start cljs repl on http://localhost:4449
