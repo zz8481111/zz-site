@@ -2,7 +2,7 @@
   :description "JavaScript generator for https://zz8481111.github.io/"
   :url "https://github.com/zz8481111/zz-site"
 
-  :min-lein-version "2.5.3"
+  :min-lein-version "2.8.3"
 
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.439"]
@@ -25,13 +25,12 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :profiles {:dev
-             {:source-paths ["dev"]
-              :dependencies [[prismatic/schema "1.1.7"]]}
-             :repl {:plugins [[cider/cider-nrepl "0.19.0"]]
-                    :dependencies [[nrepl "0.4.5"]
-                                   [cider/piggieback "0.3.9"]
-                                   [figwheel-sidecar "0.5.16"]]}}
+  :profiles {:dev {:source-paths ["dev"]
+                   :dependencies [[prismatic/schema "1.1.7"]]}}
+            ;   :repl {:plugins      [[cider/cider-nrepl "0.20.0"]]
+            ;          :dependencies [[nrepl "0.6.0"]
+            ;                         [cider/piggieback "0.3.9"]
+            ;                         [figwheel-sidecar "0.5.16"]]}}
 
 
   :cljsbuild {:builds

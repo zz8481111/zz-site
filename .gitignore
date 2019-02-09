@@ -14,3 +14,4 @@ pom.xml
 .DS_Store
 .idea
 *.iml
+resources/public/js/compiled/zz_site.js
