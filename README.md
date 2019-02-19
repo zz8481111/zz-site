@@ -14,10 +14,12 @@ repository https://github.com/zz8481111/zz8481111.github.io
 
     see https://github.com/thheller/shadow-cljs
 
-## Generate js:
+## Generate js and send to github-pages repository:
 
-    $ TODO
-    $ TODO
+    $ rm -rf public/js
+    $ shadow-cljs release frontend
+    $ cd public
+    $ git push
 
 ## Send js script to gh-pages repository:
  
