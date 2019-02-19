@@ -1,0 +1,25 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src/dev"
+  "src/main"
+  "src/test"]
+
+ :dependencies
+ [#_[org.clojure/core.async "0.3.443"  :exclusions [org.clojure/tools.reader]]
+  [reagent "0.8.1"]
+  [reagent-utils "0.3.1"]
+  [bidi "2.1.5"]
+  [venantius/accountant "0.2.4"]
+  [quil "2.8.0"]
+  [pez/clerk "1.0.0"]
+  [rum "0.11.3"]
+  [datascript "0.17.1"]
+  [org.clojure/core.async  "0.4.490"]
+  [markdown-clj "1.0.7"]]
+
+ :builds
+ {:frontend
+  {:target :browser
+   :modules  {:main {:init-fn zz-site.frontend.app/init}}
+   :devtools {:http-root "public"
+              :http-port 8080}}}}

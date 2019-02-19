@@ -1,7 +1,7 @@
-(ns zz-site.database
+(ns zz-site.frontend.database
   (:require
     [datascript.core :as d]
-    [zz-site.saved-data :as saved]))
+    [zz-site.frontend.saved-data :as saved]))
 
 
 (defn response

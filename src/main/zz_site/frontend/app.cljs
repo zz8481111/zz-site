@@ -1,20 +1,15 @@
-(ns zz-site.core
-  (:require [reagent.core :as reagent :refer [atom]]
-            [reagent.session :as session]
-            [rum.core :as rum]
+(ns zz-site.frontend.app
+  (:require [rum.core :as rum]
             [bidi.bidi :as bidi]
+            [zz-site.frontend.util :as util]
+            [zz-site.frontend.database :as db]
             [cljs.pprint :as pp]
-    ;;[schema.core :as s] ;For when defining routes get tricky
-    ;;[bidi.schema]
-            [zz-site.util :as util]
-            [zz-site.database :as db]
+            [reagent.core :as reagent :refer [atom]]
+            [reagent.session :as session]
             [accountant.core :as accountant]
-            [clerk.core :as clerk])
-  (:import
-    [goog.history.Html5History]))
-
-
-(enable-console-print!)
+            [clerk.core :as clerk]))
+(defn init []
+  (println "Hello World"))
 
 
 
@@ -22,9 +17,7 @@
 ;; ROUTES
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-(def inner-route (atom []))
+(def route (atom []))
 
 (def app-routes
   ["/" {""              :index
@@ -43,10 +36,6 @@
                          ["-"  :item-id] :zz.gists/item}
         "zz-repo"     {["s-" :ids]     :zz/page
                        ["-"  :item-id] :zz/item}}])
-; true            :four-o-four}])
-
-;;(s/check bidi.schema/RoutePair app-routes)
-;;(s/validate bidi.schema/RoutePair app-routes)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -69,7 +58,6 @@ what does not exist?"]]])
     [:article.box.post.post-excerpt
      [:header [:h2 "404: It is not here"]]
      [:pre.verse (str message)]]]))
-
 
 (rum/defc a-items []
   [:div.inner
@@ -94,9 +82,47 @@ what does not exist?"]]])
 
 
 
+; #_(rum/defc blog-sidebar []
+;   [:div#sidebar
+;    [:h1#logo [:a {:on-click (fn [_] (js/alert (session/get :route)))} "STRIPED"]] ;  ! delete this
+;    [:nav#nav
+;     [:ul#local_links
+;      (for [[k v] (sorted-map "home" (bidi/path-for app-routes :index)
+;                              "database" (bidi/path-for app-routes :database)
+;                              "a-10" (bidi/path-for app-routes :a-item :item-id "10")
+;                              ; "bottom" "#bottom"
+;                              ; "top" "#top"
+;                              "vals B" (bidi/path-for app-routes :b-items)
+;                              "articles" (bidi/path-for app-routes :zz/page :ids "1-10")
+;                              "clj-repos" (bidi/path-for app-routes :clojure/page :ids "1-10")
+;                              "numbers" (bidi/path-for app-routes :numbers/page :ids "1-10")
+;                              "gists" (bidi/path-for app-routes :zz.gists/page :ids "1-2"))]
+;        [:li {:key   k
+;              :class (when (= (keyword k) (:current-page (session/get :route))) "current")} [:a {:href v} k]])]]
+;    [:section.box.search
+;     [:form {:method :get} [:input.text {:type "text" :name "search" :placeholder "Search"}]]]
+;    [:section.box.text-style1
+;     [:div.inner
+;      [:p
+;       [:strong "Striped: "]
+;       "A free and fully responsive HTML5 site
+;           template designed by " [:a {:href "http://twitter.com/ajlkn"} "AJ"]
+;       " for " [:a {:href "http://html5up.net/"} "HTML5 UP"]]]
+;    [:section.box.recent-posts
+;     [:header [:h2 "Recent Posts"]]
+;     [:ul (for [x '("Lorem ipsum dolor"
+;                    "Feugiat nisl aliquam"
+;                    "Sed dolore magna"
+;                    "Malesuada commodo"
+;                    "Ipsum metus nullam")]
+;            [:li {:id x "key" x} [:a {:href "#"} x]])]]
+;    #_[:ul#copyright
+;     [:li#titled "\u00A9 Untitled."]
+;     [:li#design "Design: " [:a {:href "http://html5up.net"} "HTML5 UP"]]]])
+
 (rum/defc blog-sidebar []
   [:div#sidebar
-   [:h1#logo [:a {:on-click (fn [_] (js/alert (session/get :route)))} "STRIPED"]] ;  ! delete this
+   [:h1#logo [:a {:on-click (fn [_] (js/alert (session/get :route)))} "STRIPED"]]
    [:nav#nav
     [:ul#local_links
      (for [[k v] (sorted-map "home" (bidi/path-for app-routes :index)
@@ -115,23 +141,23 @@ what does not exist?"]]])
     [:form {:method :get} [:input.text {:type "text" :name "search" :placeholder "Search"}]]]
    [:section.box.text-style1
     [:div.inner
-     [:p
+     [:p 
       [:strong "Striped: "]
-      "A free and fully responsive HTML5 site
-          template designed by " [:a {:href "http://twitter.com/ajlkn"} "AJ"]
-      " for " [:a {:href "http://html5up.net/"} "HTML5 UP"]]]]
+      "A free and fully responsive HTML5 site template designed by " 
+      [:a {:href "http://twitter.com/ajlkn"} "AJ"]
+      " for " 
+      [:a {:href "http://html5up.net/"} "HTML5 UP"]]]]
    [:section.box.recent-posts
     [:header [:h2 "Recent Posts"]]
     [:ul (for [x '("Lorem ipsum dolor"
-                    "Feugiat nisl aliquam"
-                    "Sed dolore magna"
-                    "Malesuada commodo"
-                    "Ipsum metus nullam")]
+                   "Feugiat nisl aliquam"
+                   "Sed dolore magna"
+                   "Malesuada commodo"
+                   "Ipsum metus nullam")]
            [:li {:id x "key" x} [:a {:href "#"} x]])]]
    [:ul#copyright
     [:li#titled "\u00A9 Untitled."]
     [:li#design "Design: " [:a {:href "http://html5up.net"} "HTML5 UP"]]]])
-
 
 
 (rum/defc post
@@ -145,16 +171,10 @@ what does not exist?"]]])
    [:a.featured image-featured]])
 
 
-
-
-
 (rum/defc blog-title-bar []
   [:div#titleBar
    [:a.toggle {:href "#sidebar" :on-click (fn [_] (util/toggle-sidebar))}]
    [:span.title [:a {:href "#"} "STRIPED"]]])
-
-
-
 
 
 (rum/defc pagination-article' [coll-size k route-ns]
@@ -178,7 +198,6 @@ what does not exist?"]]])
      [:a.button {:href (bidi/path-for app-routes (keyword route-ns "item") :item-id (first (coll (inc k))))} "Next"])])
 
 
-;; OK
 (rum/defc pagination-page [coll-size from to route]
   "Generate pagination block with buttons
   from, to - indexes inclusive
@@ -208,6 +227,7 @@ what does not exist?"]]])
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PAGE CONTENTS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (defmulti page-contents identity)
 
@@ -241,8 +261,6 @@ what does not exist?"]]])
 (defmethod page-contents :a-items []
   (a-items))
 
-
-
 (defmethod page-contents :b-items []
   (fn []
     [:span.main
@@ -252,7 +270,6 @@ what does not exist?"]]])
                   [:a {:href (bidi/path-for app-routes :item :item-id item-id)} "B-item: " item-id]])
                (range 1 117))]
      [:p [:a {:href (bidi/path-for app-routes :a-items)} "Top of a-items"]]]))
-
 
 
 (defmethod page-contents :a-item []
@@ -271,7 +288,6 @@ what does not exist?"]]])
       [:span.main
        [:h1 (str "Item " item " of B")]
        [:p [:a {:href (bidi/path-for app-routes :items)} "Back to the list of B-items"]]])))
-
 
 (defmethod page-contents :about []
   (fn [] [:span.main
@@ -342,7 +358,7 @@ what does not exist?"]]])
 
 (defmethod page-contents :numbers/page []
   "Testing page with small data"
-  (let [routing-data (session/get :route)
+  (let [routing-data  (session/get :route)
         indexes (get-in routing-data [:route-params :ids])
         [fst lst]     (map (comp dec js/parseInt) (rest (re-find #"(\d+)-(\d+)" indexes)))
         size (count numbers)]
@@ -354,23 +370,13 @@ what does not exist?"]]])
        (post x (namespace :numbers/page) x))
      (pagination-page size fst lst :numbers/page)]))
 
-
 (defmethod page-contents :numbers/item []
   (let [routing-data (session/get :route)
         item (get-in routing-data [:route-params :item-id])]
     [:div.inner
-     (post (get-in  numbers [ (dec (js/parseInt item))]) (namespace :numbers/item) (js/parseInt item))
+     (post (get-in  numbers [(dec (js/parseInt item))]) (namespace :numbers/item) (js/parseInt item))
      (pagination-article' (count numbers) (dec (js/parseInt item)) (namespace :numbers/item))
      [:div#disqus_tread "disqus"]]))
-;;#_(let [config {:page-url "zz8481111"
-;;                :page-id  item}
-;;        d js/document]
-;;    (-> (.createElement d "script")))
-;;#_[:script "var disqus_config = function () {this.page.url = 'zz8481111'; this.page.identifier = 1};
-;;    (function() {var d = document, s = d.createElement('script');
-;;                 s.src = 'https://zz8481111.disqus.com/embed.js';
-;;                 s.setAttribute('data-timestamp', +new Date());
-;;                 (d.head || d.body).appendChild(s)})();"]
 
 
 (defmethod page-contents :clojure/item []
@@ -392,7 +398,6 @@ what does not exist?"]]])
       [:a.featured nil]]
      (pagination-article size user-repos k (namespace :clojure/item))
      [:div#disqus_tread "disqus"]]))
-;#_[:div#disqus_tread "disqus"]))
 
 (defmethod page-contents :zz/item []
   (let [routing-data                    (session/get :route)
@@ -413,7 +418,6 @@ what does not exist?"]]])
       [:a.featured nil]]
      (pagination-article size user-repos k (namespace :zz/item))
      [:div#disqus_tread "disqus"]]))
-;#_[:div#disqus_tread "disqus"]))
 
 
 (defmethod page-contents :zz.gists/page []
@@ -440,7 +444,7 @@ what does not exist?"]]])
            [:p (str url)]]
           [:div.info (replace {"-" " "} (re-find #"\d+-\d+-\d+" info))]]))
      (pagination-page size fst lst current-page)]))
-
+;#_[:div#disqus_tread "disqus"]))
 
 (defmethod page-contents :zz.gists/item []
   (let [routing-data                    (session/get :route)
@@ -462,8 +466,7 @@ what does not exist?"]]])
       [:pre "content"]
       [:a.featured nil]]
      (pagination-article size user-gists k (namespace :zz.gists/item))]))
-     ;#_[:div#disqus_tread "disqus"]))
-
+;#_[:div#disqus_tread "disqus"]))
 
 (defmethod page-contents :default []
   (non-exist))
@@ -471,6 +474,14 @@ what does not exist?"]]])
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Generate page
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#_(rum/defc current-page []
+  ;(let [page (:current-page @route #_(session/get :route))]
+      [:div#wrapper
+       #_[:div#content
+        ^{:key page} [page-contents page]]
+       (blog-sidebar)
+       (blog-title-bar)]);)
 
 (defn current-page []
   (fn []
@@ -489,17 +500,17 @@ what does not exist?"]]])
 (defn ^:export init! []
   (clerk/initialize!)
   (accountant/configure-navigation!
-    {:nav-handler  (fn
-                     [path]
-                     (reagent/after-render clerk/after-render!)
-                     (let [match (bidi/match-route app-routes path)
-                           current-page (:handler match)
-                           route-params (:route-params match)]
-                       (session/put! :route {:current-page current-page
-                                             :route-params route-params}))
-                     (clerk/navigate-page! path))
-     :path-exists? (fn [path]
-                     (boolean (bidi/match-route app-routes path)))})
+   {:nav-handler  (fn
+                    [path]
+                    (reagent/after-render clerk/after-render!)
+                    (let [match (bidi/match-route app-routes path)
+                          current-page (:handler match)
+                          route-params (:route-params match)]
+                      (session/put! :route {:current-page current-page
+                                            :route-params route-params}))
+                    (clerk/navigate-page! path))
+    :path-exists? (fn [path]
+                    (boolean (bidi/match-route app-routes path)))})
   (accountant/dispatch-current!)
   (on-js-reload))
 
@@ -508,4 +519,20 @@ what does not exist?"]]])
 ; Comments
 ;;;;;;;;;;;;;;
 
-;;    (start)   - for start cljs repl on http://localhost:4449
+;; shadow-cljs watch frontend
+
+;;#_(let [config {:page-url "zz8481111"
+;;                :page-id  item}
+;;        d js/document]
+;;    (-> (.createElement d "script")))
+;;#_[:script "var disqus_config = function () {this.page.url = 'zz8481111'; this.page.identifier = 1};
+;;    (function() {var d = document, s = d.createElement('script');
+;;                 s.src = 'https://zz8481111.disqus.com/embed.js';
+;;                 s.setAttribute('data-timestamp', +new Date());
+;;                 (d.head || d.body).appendChild(s)})();"]
+
+
+
+#_(rum/mount (current-page) (. js/document (getElementById "app")))
+
+(init!)
