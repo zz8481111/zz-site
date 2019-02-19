@@ -3,18 +3,24 @@
 
 repository https://github.com/zz8481111/zz8481111.github.io
 
-## Generate js:
+## Start http://localhost:8080 server
+    
+    $ npm install
+    $ shadow-cljs watch frontend
 
-    $ lein clean
-    $ lein cljsbuild once min
+    or 
 
-## Send js script to gh-pages repository:
- 
-    $ ...
-        
-## start Figwheel cljs repl
+    $ npx shadow-cljs watch frontend
 
-    zz-site.user> (start)
+    see https://github.com/thheller/shadow-cljs
+
+## Generate js and send to github-pages repository:
+
+    $ rm -rf public/js
+    $ shadow-cljs release frontend
+    $ cd public
+    $ git push origin master
+    $ cd ..
 
 ## License
 
