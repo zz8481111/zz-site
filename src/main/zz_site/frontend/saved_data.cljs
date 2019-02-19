@@ -1,4 +1,4 @@
-(ns zz-site.saved-data)
+(ns zz-site.frontend.saved-data)
 
 (def data
   {["zz8481111" :repos] (list {:repo/private    false,
