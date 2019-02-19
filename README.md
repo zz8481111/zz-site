@@ -19,13 +19,8 @@ repository https://github.com/zz8481111/zz8481111.github.io
     $ rm -rf public/js
     $ shadow-cljs release frontend
     $ cd public
-    $ git push
-
-## Send js script to gh-pages repository:
- 
-    $ TODO
-        
-
+    $ git push origin master
+    $ cd ..
 
 ## License
 
