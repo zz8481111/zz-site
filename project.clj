@@ -26,11 +26,8 @@
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
   :profiles {:dev {:source-paths ["dev"]
-                   :dependencies [[prismatic/schema "1.1.7"]]}}
-            ;   :repl {:plugins      [[cider/cider-nrepl "0.20.0"]]
-            ;          :dependencies [[nrepl "0.6.0"]
-            ;                         [cider/piggieback "0.3.9"]
-            ;                         [figwheel-sidecar "0.5.16"]]}}
+                   :dependencies [[prismatic/schema "1.1.7"]
+                                  [figwheel-sidecar "0.5.4-6"]]}}
 
 
   :cljsbuild {:builds
