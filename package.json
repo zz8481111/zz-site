@@ -9,5 +9,11 @@
     "create-react-class": "^15.6.3",
     "react": "^16.8.2",
     "react-dom": "^16.8.2"
+  },
+  "scripts": {
+    "dev": "shadow-cljs watch frontend",
+    "release": "shadow-cljs release frontend",
+    "clean": "rm -rf public/js",
+    "push-public": "cd public && git push origin master && cd .."
   }
 }
