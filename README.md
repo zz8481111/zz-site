@@ -7,22 +7,22 @@ about [shadow-cljs](https://github.com/thheller/shadow-cljs)
 
 ## Start http://localhost:8080 server
     
->    $ npm install
->    $ shadow-cljs watch frontend
+    $ npm install
+    $ shadow-cljs watch frontend
 
-    or 
+>    or 
 
->    $ npx shadow-cljs watch frontend
+    $ npx shadow-cljs watch frontend
 
-    or via script
+>    or via script
 
->    $ npm run dev
+    $ npm run dev
 
 ## Generate js and send to github-pages repository:
 
->    $ npm run clean
->    $ npm run release
->    $ npm run push-public
+    $ npm run clean
+    $ npm run release
+    $ npm run push-public
 
 ## License
 
